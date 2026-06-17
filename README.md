@@ -5,6 +5,12 @@ Node.js with a tiny dependency footprint (Express + ws). The engine maintains a
 fixed number of concurrent request loops and streams live metrics to the browser
 over WebSockets.
 
+![Load Tester dashboard](img/screenshot.png)
+
+The dashboard: configuration panel on the left, live request/sec and latency
+charts up top, and a post-test report with a health verdict, analytics cards,
+latency percentile/distribution charts, and a response-code breakdown.
+
 ## Features
 
 - Configure target URL, method, headers, and body from the dashboard
