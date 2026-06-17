@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Load Tester</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>⚡ Load Tester</h1>
+    <span id="status" class="status idle">idle</span>
+  </header>
+
+  <main>
+    <section class="panel config">
+      <h2>Configuration</h2>
+      <form id="config-form">
+        <label>Target URL
+          <input type="text" id="url" placeholder="https://example.com/?id={{seq}}" required />
+        </label>
+        <p class="hint">
+          Click a placeholder to insert it into the URL at the cursor
+          (also valid in headers &amp; body):
+          <code>{{seq}}</code> <code>{{uuid}}</code> <code>{{rand}}</code>
+          <code>{{rand:N}}</code> <code>{{randint:a:b}}</code> <code>{{timestamp}}</code>
+        </p>
+
+        <div class="row">
+          <label>Method
+            <select id="method">
+              <option>GET</option><option>POST</option><option>PUT</option>
+              <option>PATCH</option><option>DELETE</option><option>HEAD</option>
+            </select>
+          </label>
+          <label>Concurrency
+            <input type="number" id="concurrency" value="20" min="1" />
+          </label>
+        </div>
+
+        <div class="row">
+          <label>Duration (s)
+            <input type="number" id="duration" value="15" min="0" />
+          </label>
+          <label>Max requests
+            <input type="number" id="totalRequests" value="0" min="0" />
+          </label>
+        </div>
+
+        <div class="row">
+          <label>Timeout (ms)
+            <input type="number" id="timeout" value="10000" min="100" />
+          </label>
+          <label>Think time (ms)
+            <input type="number" id="delay" value="0" min="0" />
+          </label>
+        </div>
+
+        <label>Sequence start (<code>{{seq}}</code> begins here)
+          <input type="number" id="seqStart" value="1" />
+        </label>
+
+        <label>Headers (JSON)
+          <textarea id="headers" rows="3" placeholder='{ "Authorization": "Bearer ..." }'></textarea>
+        </label>
+
+        <label>Body (for POST/PUT/PATCH)
+          <textarea id="body" rows="3" placeholder='{ "key": "value" }'></textarea>
+        </label>
+
+        <div class="actions">
+          <button type="submit" id="start-btn">Start test</button>
+          <button type="button" id="stop-btn" disabled>Stop</button>
+        </div>
+        <p id="form-error" class="error"></p>
+      </form>
+    </section>
+
+    <section class="panel results">
+      <div class="metrics" id="metrics">
+        <div class="metric"><span class="value" id="m-rps">0</span><span class="label">req/sec</span></div>
+        <div class="metric"><span class="value" id="m-completed">0</span><span class="label">completed</span></div>
+        <div class="metric"><span class="value" id="m-failed">0</span><span class="label">failed</span></div>
+        <div class="metric"><span class="value" id="m-inflight">0</span><span class="label">in flight</span></div>
+        <div class="metric"><span class="value" id="m-avg">0</span><span class="label">avg ms</span></div>
+        <div class="metric"><span class="value" id="m-p95">0</span><span class="label">p95 ms</span></div>
+        <div class="metric"><span class="value" id="m-p99">0</span><span class="label">p99 ms</span></div>
+        <div class="metric"><span class="value" id="m-elapsed">0</span><span class="label">elapsed s</span></div>
+      </div>
+
+      <div class="charts">
+        <div class="chart-box"><canvas id="rpsChart"></canvas></div>
+        <div class="chart-box"><canvas id="latChart"></canvas></div>
+      </div>
+
+      <div id="summary" class="summary hidden">
+        <div class="summary-head">
+          <h2>Test Report</h2>
+          <button type="button" id="download-btn">⬇ Download CSV report</button>
+        </div>
+
+        <div id="verdict" class="verdict"></div>
+        <div id="analytics" class="analytics"></div>
+
+        <div class="report-charts">
+          <div class="chart-box"><canvas id="pctChart"></canvas></div>
+          <div class="chart-box"><canvas id="distChart"></canvas></div>
+          <div class="chart-box"><canvas id="statusChart"></canvas></div>
+        </div>
+
+        <details class="raw">
+          <summary>Raw JSON</summary>
+          <pre id="summary-json"></pre>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

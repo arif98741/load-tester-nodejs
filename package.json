@@ -1,0 +1,18 @@
+{
+  "name": "load-tester",
+  "version": "1.0.0",
+  "description": "HTTP/REST load testing tool with a live web dashboard",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ws": "^8.18.0"
+  }
+}
